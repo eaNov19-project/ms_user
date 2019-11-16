@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-ms
+  labels:
+    app: user-ms
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-ms
+  template:
+    metadata:
+      labels:
+        app: user-ms
+    spec:
+      containers:
+        - name: user-ms
+          image: islamahmad/eaproj-userms:1.0.2
+          env:
+           - name: MYSQL_PASSWORD
+             valueFrom:
+               configMapKeyRef:
+                 name: user-ms
+                 key: MYSQL_PASSWORD
+           - name: SERVICE_API_KEY
+             valueFrom:
+               configMapKeyRef:
+                 name: user-ms
+                 key: SERVICE_API_KEY
+           - name: MYSQL_PORT
+             valueFrom:
+               configMapKeyRef:
+                 name: user-ms
+                 key: MYSQL_PORT
+           - name: MYSQL_USER
+             valueFrom:
+               configMapKeyRef:
+                 name: user-ms
+                 key: MYSQL_USER
+           - name: MYSQL_HOST
+             valueFrom:
+               configMapKeyRef:
+                 name: user-ms
+                 key: MYSQL_HOST

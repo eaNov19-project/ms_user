@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-ms
+  namespace: default
+data:
+  SERVICE_API_KEY: apikey
+  MYSQL_HOST: "mysql-1573837923.default.svc.cluster.local"
+  MYSQL_PORT: "3306"
+  MYSQL_USER: chinedu
+  MYSQL_PASSWORD: chinedupass
+  AUTHENTICATE_SERVICE: authentication-service.default.svc.cluster.local:8080

@@ -3,6 +3,7 @@ import ea.sof.ms_user.entity.UserEntity;
 import ea.sof.ms_user.interfaces.MsAuth;
 import ea.sof.ms_user.serviceImpl.UserServiceImpl;
 import ea.sof.shared.models.Auth;
+import ea.sof.shared.models.Response;
 import ea.sof.shared.models.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.parser.Entity;
 
 @RestController
 @CrossOrigin
@@ -22,48 +22,106 @@ public class UserController {
     private UserServiceImpl userService;
 
     @PostMapping("/add")
-    public ResponseEntity<?> addUser(@RequestBody User user) throws Exception {
+    public ResponseEntity<Response> addUser(@RequestBody User user) {
         ModelMapper modelMapper = new ModelMapper();
         UserEntity entity = new UserEntity();
         modelMapper.map(user, entity);
 
         try {
             Auth auth = new Auth();
-            auth.setUsername(user.getUsername());
+            auth.setEmail(user.getEmail());
             auth.setPassword(user.getPassword());
-            ResponseEntity<Auth> ms_auth = (ResponseEntity<Auth>) msAuth.addAuth(auth);
+            ResponseEntity<Response> ms_auth =  msAuth.addAuth(auth);
 
-            if (ms_auth.getBody().getUsername() != null) {
-                return ResponseEntity.ok().body(userService.addUser(entity));
+            if (ms_auth.getBody().getSuccess()) {
+                UserEntity userEntity = userService.addUser(entity);
+                Response response = new Response();
+                response.setSuccess(true);
+                response.addObject("user", userEntity);
+
+                return new ResponseEntity(response, HttpStatus.OK);
             }
         } catch (Exception e) {
-            System.out.println("addUser():  " +e.getMessage());
-            return ResponseEntity.badRequest().body("adding of user failed: " + e.getMessage());
+            Response response = new Response();
+            response.setSuccess(false);
+            response.addObject("exception", e.getMessage());
+            return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
         }
-        return ResponseEntity.badRequest().body("invalid data");
+        Response response = new Response();
+        response.setSuccess(false);
+        response.addObject("exception", "invalid data");
+        return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/edit")
-    public ResponseEntity<UserEntity> editUser(@RequestBody User user) {
-        ModelMapper modelMapper = new ModelMapper();
-        UserEntity entity = new UserEntity();
-        modelMapper.map(user, entity);
-
+    public ResponseEntity<Response> editUser(@RequestBody User user,
+                                             @RequestHeader("Authorization") String token) {
         try {
-            return new ResponseEntity(userService.addUser(entity), HttpStatus.OK);
+            Response authCheckResp = isAuthorized(token);
+            if (authCheckResp.getSuccess()) {
+                ModelMapper modelMapper = new ModelMapper();
+                UserEntity entity = new UserEntity();
+                modelMapper.map(user, entity);
+
+                UserEntity userEntity = userService.editUser(entity);
+                Response response = new Response();
+                response.setSuccess(true);
+                response.addObject("user", userEntity);
+
+                return new ResponseEntity(response, HttpStatus.OK);
+            } else {
+                return ResponseEntity.
+                        status(HttpStatus.UNAUTHORIZED).body(new Response(false, "Invalid Token"));
+            }
+
         } catch (Exception e) {
-            System.out.println("editUser():  " +e.getMessage());
-            return new ResponseEntity("edit of user failed: " + e.getMessage(), HttpStatus.NOT_MODIFIED);
+            Response response = new Response();
+            response.setSuccess(false);
+            response.addObject("exception", e.getMessage());
+            return new ResponseEntity(response, HttpStatus.NOT_MODIFIED);
         }
     }
 
-    @GetMapping("/get")
-    public ResponseEntity<UserEntity> getUser(@PathVariable String username) {
+    @GetMapping("/get/{email}")
+    public ResponseEntity<Response> getUser(@PathVariable("email") String email,
+                                            @RequestHeader("Authorization") String token ) {
         try {
-            return new ResponseEntity(userService.getUser(username), HttpStatus.OK);
+            //Check if request is authorized
+            Response authCheckResp = isAuthorized(token);
+            if (authCheckResp.getSuccess()) {
+                UserEntity userEntity = userService.getUser(email);
+                Response response = new Response();
+                response.setSuccess(true);
+                response.addObject("user", userEntity);
+
+                return new ResponseEntity(response, HttpStatus.OK);
+            } else {
+                return ResponseEntity.
+                        status(HttpStatus.UNAUTHORIZED).body(new Response(false, "Invalid Token"));
+            }
+
         } catch (Exception e) {
-            System.out.println("getUser():  " +e.getMessage());
-            return new ResponseEntity("User Retrieval failed: " + e.getMessage(), HttpStatus.NOT_FOUND);
+            Response response = new Response();
+            response.setSuccess(false);
+            response.addObject("exception", e.getMessage());
+            return new ResponseEntity(response, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    private Response isAuthorized(String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return new Response(false, "Invalid token");
+        }
+        try {
+            ResponseEntity<Response> result = msAuth.validateToken(authHeader);
+
+            if (!result.getBody().getSuccess()) {
+                return new Response(false, "Invalid token");
+            }
+            return result.getBody();
+
+        }catch (Exception e){
+            return new Response(false, "exception", e);
         }
     }
 
