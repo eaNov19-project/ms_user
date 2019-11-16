@@ -2,9 +2,8 @@ package ea.sof.ms_user.serviceImpl;
 
 import ea.sof.ms_user.entity.UserEntity;
 import ea.sof.ms_user.repository.UserRepository;
-import ea.sof.ms_user.service.UserService;
+import ea.sof.ms_user.serviceTest.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,12 +12,12 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public ResponseEntity<?> addUser(UserEntity userEntity) {
-        return ResponseEntity.ok(userRepository.save(userEntity));
+    public UserEntity addUser(UserEntity userEntity) {
+        return userRepository.save(userEntity);
     }
 
     @Override
-    public ResponseEntity<?> getUser(String username) {
-        return ResponseEntity.ok().body(userRepository.findByUsername(username));
+    public UserEntity getUser(String username) {
+        return userRepository.findByUsername(username);
     }
 }

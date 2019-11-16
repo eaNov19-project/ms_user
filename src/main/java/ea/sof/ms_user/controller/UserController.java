@@ -6,8 +6,11 @@ import ea.sof.shared.models.Auth;
 import ea.sof.shared.models.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.swing.text.html.parser.Entity;
 
 @RestController
 @CrossOrigin
@@ -19,7 +22,7 @@ public class UserController {
     private UserServiceImpl userService;
 
     @PostMapping("/add")
-    public ResponseEntity<?> addUser(@RequestBody User user) {
+    public ResponseEntity<?> addUser(@RequestBody User user) throws Exception {
         ModelMapper modelMapper = new ModelMapper();
         UserEntity entity = new UserEntity();
         modelMapper.map(user, entity);
@@ -32,36 +35,35 @@ public class UserController {
 
             if (ms_auth.getBody().getUsername() != null) {
                 return ResponseEntity.ok().body(userService.addUser(entity));
-            } else {
-                return ResponseEntity.badRequest().body("user not saved in auth service");
             }
         } catch (Exception e) {
             System.out.println("addUser():  " +e.getMessage());
             return ResponseEntity.badRequest().body("adding of user failed: " + e.getMessage());
         }
+        return ResponseEntity.badRequest().body("invalid data");
     }
 
     @PostMapping("/edit")
-    public ResponseEntity<?> editUser(@RequestBody User user) {
+    public ResponseEntity<UserEntity> editUser(@RequestBody User user) {
         ModelMapper modelMapper = new ModelMapper();
         UserEntity entity = new UserEntity();
         modelMapper.map(user, entity);
 
         try {
-            return ResponseEntity.ok().body(userService.addUser(entity));
+            return new ResponseEntity(userService.addUser(entity), HttpStatus.OK);
         } catch (Exception e) {
             System.out.println("editUser():  " +e.getMessage());
-            return ResponseEntity.badRequest().body("edit of user failed: " + e.getMessage());
+            return new ResponseEntity("edit of user failed: " + e.getMessage(), HttpStatus.NOT_MODIFIED);
         }
     }
 
-    @PostMapping("/get")
-    public ResponseEntity<?> getUser(@PathVariable String username) {
+    @GetMapping("/get")
+    public ResponseEntity<UserEntity> getUser(@PathVariable String username) {
         try {
-            return ResponseEntity.ok().body(userService.getUser(username));
+            return new ResponseEntity(userService.getUser(username), HttpStatus.OK);
         } catch (Exception e) {
             System.out.println("getUser():  " +e.getMessage());
-            return ResponseEntity.badRequest().body("User Retrieval failed: " + e.getMessage());
+            return new ResponseEntity("User Retrieval failed: " + e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
