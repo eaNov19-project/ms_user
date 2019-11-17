@@ -4,6 +4,6 @@ import ea.sof.shared.showcases.MsAuthShowcase;
 import org.springframework.cloud.openfeign.FeignClient;
 
 //@FeignClient(name="ms-auth", url = "http://localhost:8080/auth")
-@FeignClient(name="AUTH_MS", url = "${AUTH_MS_URL}")
+@FeignClient(name="auth-ms", url = "${AUTHENTICATE_SERVICE}")
 public interface MsAuth extends MsAuthShowcase {
 }

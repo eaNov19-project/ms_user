@@ -5,7 +5,7 @@ metadata:
   labels:
     app: user-ms
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: user-ms
@@ -16,18 +16,13 @@ spec:
     spec:
       containers:
         - name: user-ms
-          image: islamahmad/eaproj-userms:1.0.2
+          image: islamahmad/eaproj-userms:1.0.0
           env:
            - name: MYSQL_PASSWORD
              valueFrom:
                configMapKeyRef:
                  name: user-ms
                  key: MYSQL_PASSWORD
-           - name: SERVICE_API_KEY
-             valueFrom:
-               configMapKeyRef:
-                 name: user-ms
-                 key: SERVICE_API_KEY
            - name: MYSQL_PORT
              valueFrom:
                configMapKeyRef:
@@ -43,3 +38,13 @@ spec:
                configMapKeyRef:
                  name: user-ms
                  key: MYSQL_HOST
+           - name: AUTHENTICATE_SERVICE
+             valueFrom:
+               configMapKeyRef:
+                 name: user-ms
+                 key: AUTHENTICATE_SERVICE
+           - name: DB_NAME
+             valueFrom:
+               configMapKeyRef:
+                 name: user-ms
+                 key: DB_NAME
