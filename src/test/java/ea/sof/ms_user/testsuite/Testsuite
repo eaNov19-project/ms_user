@@ -1,6 +1,6 @@
 # Testing for Adding of Users:
 
-endpoint: http://localhost:8080/api/users/add
+endpoint: http://35.192.125.62:8080/api/users/add
 Method: POST
 
 {
@@ -12,7 +12,7 @@ Method: POST
 
 # Testing for Editing of Users:
 
-endpoint: http://localhost:8080/api/users/edit
+endpoint: http://35.192.125.62:8080/api/users/edit
 Method: POST
 
 Login with the email and password to get Bearer Token:
@@ -28,6 +28,6 @@ Pass Authorization as header and pass Bearer token;
 
 # Testing for getting of Users:
 
-endpoint: http://localhost:8080/api/users/get/eduurb43@gmail.com
+endpoint: http://35.192.125.62:8080/api/users/get/eduurb43@gmail.com
 Method: Get
 Pass Authorization as header and pass Bearer token
