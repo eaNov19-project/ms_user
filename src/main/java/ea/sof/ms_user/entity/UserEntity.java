@@ -3,6 +3,7 @@ package ea.sof.ms_user.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Data
 @Entity
@@ -14,6 +15,10 @@ public class UserEntity {
     @Column(unique = true, name = "email")
     private String email;
     private String phone;
+    private String name;
+    private Integer noOfQuestions;
+    private LocalDate lastUpdated;
+    private LocalDate createdDate;
 
     public UserEntity() {
     }
