@@ -1,0 +1,33 @@
+# Testing for Adding of Users:
+
+endpoint: http://localhost:8080/api/users/add
+Method: POST
+
+{
+	"email": "eduurb43@gmail.com",
+	"password": "chinedu",
+	"phone": "+1641234567"
+}
+
+
+# Testing for Editing of Users:
+
+endpoint: http://localhost:8080/api/users/edit
+Method: POST
+
+Login with the email and password to get Bearer Token:
+Pass Authorization as header and pass Bearer token;
+
+{
+            "userId": insert the id of the user saved above here or search using the email*****
+            "email": "eduurb43@gmail.com",
+            "phone": "+1641234568",
+            "name": "Chinedu",
+            "noOfQuestions": 2,
+}
+
+# Testing for getting of Users:
+
+endpoint: http://localhost:8080/api/users/get/eduurb43@gmail.com
+Method: Get
+Pass Authorization as header and pass Bearer token;
