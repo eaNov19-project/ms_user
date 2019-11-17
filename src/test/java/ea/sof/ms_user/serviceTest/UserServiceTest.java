@@ -20,7 +20,7 @@ public class UserServiceTest {
     UserRepository userRepository;
 
     @Test
-    public void addUserTest() {
+    public void addUserTest() throws Exception {
         UserEntity mockUserEntity = new UserEntity("van@gmail.com", "+1641234567");
         Mockito.when(userRepository.save(mockUserEntity)).thenReturn(mockUserEntity);
 
@@ -28,7 +28,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void editUserTest() {
+    public void editUserTest() throws Exception {
         UserEntity mockUserEntity = new UserEntity("van@gmail.com", "+1641234567");
         mockUserEntity.setUserId(1);
         Mockito.when(userRepository.findByEmail(mockUserEntity.getEmail())).thenReturn(mockUserEntity);
@@ -38,7 +38,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void getUserTest() {
+    public void getUserTest() throws Exception {
         String username = "van@gmail.com";
         UserEntity mockUserEntity = new UserEntity("van@gmail.com", "+1641234567");
 

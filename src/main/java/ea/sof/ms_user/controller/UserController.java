@@ -108,6 +108,16 @@ public class UserController {
         }
     }
 
+    @PostMapping("/question-increment/{email}")
+    public void updateNoOfQuestions(@PathVariable("email") String email) throws Exception {
+        try {
+            userService.saveNoOfQuestions(email, 1);
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+
+    }
+
     private Response isAuthorized(String authHeader) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return new Response(false, "Invalid token");

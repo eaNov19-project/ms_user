@@ -30,7 +30,7 @@ public class UserControllerTest {
     private MsAuth msAuth;
 
     @Test
-    public void addUserTest() {
+    public void addUserTest() throws Exception {
         UserEntity mockUserEntity = new UserEntity("van@gmail.com",  "+1641234567");
         User user= new User("van@gmail.com", null, "+1641234567");
 
@@ -49,7 +49,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void editUserTest() {
+    public void editUserTest() throws Exception {
         UserEntity mockUserEntity = new UserEntity("van@gmail.com", "+1641234567");
         User user= new User("van@gmail.com", "", "+1641234567");
 
@@ -72,7 +72,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void getUserTest() {
+    public void getUserTest() throws Exception {
         String email = "van@gmail.com";
         UserEntity mockUserEntity = new UserEntity("van@gmail.com", "+1641234567");
 
@@ -94,5 +94,14 @@ public class UserControllerTest {
         Mockito.when(userService.getUser(email)).thenReturn(mockUserEntity);
         assertEquals((userController.getUser(email, tokenTest).getBody()), response);
     }
+
+//
+//    @Test
+//    public void noOfQuestionTest() throws Exception {
+//        String email = "van@gmail.com";
+//
+//        Mockito.doThrow(new Exception()).when(userService.saveNoOfQuestions(email, 1));
+//        assert ((userController.updateNoOfQuestions(email)), void);
+//    }
 
 }

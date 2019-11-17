@@ -14,25 +14,50 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public UserEntity addUser(UserEntity userEntity) {
-        userEntity.setCreatedDate(LocalDate.now());
-        userEntity.setLastUpdated(LocalDate.now());
-        return userRepository.save(userEntity);
-    }
-
-    @Override
-    public UserEntity editUser(UserEntity userEntity) {
-        UserEntity user = userRepository.findByEmail(userEntity.getEmail());
-        if(user.getUserId() != null) {
-            user.setLastUpdated(LocalDate.now());
-            user.setPhone(userEntity.getPhone());
+    public UserEntity addUser(UserEntity userEntity) throws Exception {
+        try {
+            userEntity.setCreatedDate(LocalDate.now());
+            userEntity.setLastUpdated(LocalDate.now());
+            userEntity.setNoOfQuestions(0);
+            return userRepository.save(userEntity);
+        } catch (Exception e) {
+            throw new Exception("User not added" + e.getMessage());
         }
-        return userRepository.save(user);
+    }
+
+    @Override
+    public UserEntity editUser(UserEntity userEntity) throws Exception {
+        try {
+                UserEntity user = userRepository.findByEmail(userEntity.getEmail());
+                user.setLastUpdated(LocalDate.now());
+                user.setPhone(userEntity.getPhone());
+                return userRepository.save(user);
+        } catch (Exception e) {
+            throw new Exception("User not edited" + e.getMessage());
+        }
+    }
+
+    @Override
+    public void saveNoOfQuestions(String email, Integer counter) throws Exception {
+        try {
+            UserEntity user = userRepository.findByEmail(email);
+            if(user.getUserId() != null) {
+                counter += user.getNoOfQuestions();
+                user.setNoOfQuestions(counter);
+                userRepository.save(user);
+            }
+        } catch (Exception e) {
+            throw new Exception("No of Question not increased" + e.getMessage());
+        }
     }
 
 
     @Override
-    public UserEntity getUser(String username) {
-        return userRepository.findByEmail(username);
+    public UserEntity getUser(String username) throws Exception {
+        try {
+            return userRepository.findByEmail(username);
+        } catch (Exception e) {
+            throw new Exception("User not found" + e.getMessage());
+        }
     }
 }
