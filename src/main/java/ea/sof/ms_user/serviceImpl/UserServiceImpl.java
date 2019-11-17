@@ -6,6 +6,8 @@ import ea.sof.ms_user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
@@ -13,6 +15,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity addUser(UserEntity userEntity) {
+        userEntity.setCreatedDate(LocalDate.now());
+        userEntity.setLastUpdated(LocalDate.now());
         return userRepository.save(userEntity);
     }
 
@@ -20,6 +24,7 @@ public class UserServiceImpl implements UserService {
     public UserEntity editUser(UserEntity userEntity) {
         UserEntity user = userRepository.findByEmail(userEntity.getEmail());
         if(user.getUserId() != null) {
+            user.setLastUpdated(LocalDate.now());
             user.setPhone(userEntity.getPhone());
         }
         return userRepository.save(user);
