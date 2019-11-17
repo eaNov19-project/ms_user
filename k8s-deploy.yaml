@@ -5,7 +5,7 @@ metadata:
   labels:
     app: user-ms
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: user-ms
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: user-ms
-          image: islamahmad/eaproj-userms:1.0.4
+          image: islamahmad/eaproj-userms:1.0.6
           env:
            - name: MYSQL_PASSWORD
              valueFrom:
