@@ -3,7 +3,7 @@ package ea.sof.ms_user.entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -17,8 +17,8 @@ public class UserEntity {
     private String phone;
     private String name;
     private Integer noOfQuestions;
-    private LocalDate lastUpdated;
-    private LocalDate createdDate;
+    private LocalDateTime lastUpdated;
+    private LocalDateTime createdDate;
 
     public UserEntity() {
     }

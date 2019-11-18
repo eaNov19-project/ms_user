@@ -6,7 +6,8 @@ import ea.sof.ms_user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.Clock;
+import java.time.LocalDateTime;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -16,8 +17,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserEntity addUser(UserEntity userEntity) throws Exception {
         try {
-            userEntity.setCreatedDate(LocalDate.now());
-            userEntity.setLastUpdated(LocalDate.now());
+            userEntity.setCreatedDate(LocalDateTime.now(Clock.systemUTC()));
+            userEntity.setLastUpdated(LocalDateTime.now(Clock.systemUTC()));
             userEntity.setNoOfQuestions(0);
             return userRepository.save(userEntity);
         } catch (Exception e) {
@@ -29,8 +30,9 @@ public class UserServiceImpl implements UserService {
     public UserEntity editUser(UserEntity userEntity) throws Exception {
         try {
                 UserEntity user = userRepository.findByEmail(userEntity.getEmail());
-                user.setLastUpdated(LocalDate.now());
+                user.setLastUpdated(LocalDateTime.now(Clock.systemUTC()));
                 user.setPhone(userEntity.getPhone());
+                user.setName(userEntity.getName());
                 return userRepository.save(user);
         } catch (Exception e) {
             throw new Exception("User not edited" + e.getMessage());
