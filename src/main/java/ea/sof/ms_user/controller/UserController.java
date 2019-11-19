@@ -1,6 +1,5 @@
 package ea.sof.ms_user.controller;
 import ea.sof.ms_user.entity.UserEntity;
-//import ea.sof.ms_user.interfaces.MsAuth;
 import ea.sof.ms_user.service.AuthService;
 import ea.sof.ms_user.serviceImpl.UserServiceImpl;
 import ea.sof.shared.models.Auth;
