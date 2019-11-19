@@ -41,7 +41,7 @@ spec:
            - name: AUTHENTICATE_SERVICE
              valueFrom:
                configMapKeyRef:
-                 name: user-ms
+                 name: services-global
                  key: AUTHENTICATE_SERVICE
            - name: DB_NAME
              valueFrom:

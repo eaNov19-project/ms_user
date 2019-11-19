@@ -8,5 +8,5 @@ data:
   MYSQL_PORT: "3306"
   MYSQL_USER: userms
   MYSQL_PASSWORD: usermspass
-  AUTHENTICATE_SERVICE: "authentication-service.default.svc.cluster.local:8080"
+#  AUTHENTICATE_SERVICE: "authentication-service.default.svc.cluster.local:8080"
   DB_NAME: userms
