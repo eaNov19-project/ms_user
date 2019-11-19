@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     @Autowired
     AuthService authService;
-//    private MsAuth msAuth;
+
     @Autowired
     private UserServiceImpl userService;
 
