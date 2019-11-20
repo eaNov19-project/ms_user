@@ -26,7 +26,7 @@ public class UserController {
     @Autowired
     private UserServiceImpl userService;
 
-    @Value("${APP_VERSION}")
+    @Value("${app.version}")
     private String appVersion;
 
     @GetMapping("/health")
