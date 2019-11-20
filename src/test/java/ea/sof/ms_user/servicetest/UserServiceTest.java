@@ -1,4 +1,4 @@
-package ea.sof.ms_user.servicetest;
+package ea.sof.ms_user.serviceTest;
 
 import ea.sof.ms_user.entity.UserEntity;
 import ea.sof.ms_user.repository.UserRepository;

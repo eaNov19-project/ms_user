@@ -16,35 +16,36 @@ spec:
     spec:
       containers:
         - name: user-ms
-          image: islamahmad/eaproj-userms:1.0.6
+          image: islamahmad/eaproj-userms:1.0.13
           env:
-           - name: MYSQL_PASSWORD
-             valueFrom:
-               configMapKeyRef:
+            - name: APP_VERSION
+              value: "islamahmad/eaproj-userms:1.0.13"
+            - name: MYSQL_PASSWORD
+              valueFrom:
+               secretKeyRef:
                  name: user-ms
                  key: MYSQL_PASSWORD
-           - name: MYSQL_PORT
-             valueFrom:
-               configMapKeyRef:
-                 name: user-ms
-                 key: MYSQL_PORT
-           - name: MYSQL_USER
-             valueFrom:
-               configMapKeyRef:
-                 name: user-ms
-                 key: MYSQL_USER
-           - name: MYSQL_HOST
-             valueFrom:
-               configMapKeyRef:
-                 name: user-ms
-                 key: MYSQL_HOST
-           - name: AUTHENTICATE_SERVICE
-             valueFrom:
-               configMapKeyRef:
-                 name: user-ms
-                 key: AUTHENTICATE_SERVICE
-           - name: DB_NAME
-             valueFrom:
-               configMapKeyRef:
-                 name: user-ms
-                 key: DB_NAME
+            # GENERAL
+            - name: SERVER_PORT
+              value: "8080"
+#           - name: MYSQL_PORT
+#             valueFrom:
+#               configMapKeyRef:
+#                 name: user-ms
+#                 key: MYSQL_PORT
+#           - name: MYSQL_USER
+#             valueFrom:
+#               configMapKeyRef:
+#                 name: user-ms
+#                 key: MYSQL_USER
+#           - name: MYSQL_HOST
+#             valueFrom:
+#               configMapKeyRef:
+#                 name: user-ms
+#                 key: MYSQL_HOST
+#           - name: AUTHENTICATE_SERVICE
+          envFrom:
+            - configMapRef:
+                name: services-global
+            - configMapRef:
+                name: user-ms

@@ -1,23 +1,24 @@
-package ea.sof.ms_user.controllertest;
+package ea.sof.ms_user.controllerTest;
+
 import ea.sof.ms_user.controller.UserController;
-import ea.sof.ms_user.entity.UserEntity;
-import ea.sof.ms_user.interfaces.MsAuth;
-import ea.sof.ms_user.serviceImpl.UserServiceImpl;
-import ea.sof.shared.models.Auth;
-import ea.sof.shared.models.Response;
-import ea.sof.shared.models.User;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+        import ea.sof.ms_user.entity.UserEntity;
+        import ea.sof.ms_user.interfaces.MsAuth;
+        import ea.sof.ms_user.serviceImpl.UserServiceImpl;
+        import ea.sof.shared.models.Auth;
+        import ea.sof.shared.models.Response;
+        import ea.sof.shared.models.User;
+        import org.junit.Test;
+        import org.junit.runner.RunWith;
+        import org.mockito.InjectMocks;
+        import org.mockito.Mock;
+        import org.mockito.Mockito;
+        import org.springframework.http.HttpHeaders;
+        import org.springframework.http.HttpStatus;
+        import org.springframework.http.ResponseEntity;
+        import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+        import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 public class UserControllerTest {

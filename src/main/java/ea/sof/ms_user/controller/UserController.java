@@ -1,25 +1,44 @@
 package ea.sof.ms_user.controller;
 import ea.sof.ms_user.entity.UserEntity;
-import ea.sof.ms_user.interfaces.MsAuth;
+import ea.sof.ms_user.service.AuthService;
 import ea.sof.ms_user.serviceImpl.UserServiceImpl;
 import ea.sof.shared.models.Auth;
 import ea.sof.shared.models.Response;
 import ea.sof.shared.models.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 
 @RestController
 @CrossOrigin
-@RequestMapping("api/users")
+@RequestMapping("/users")
 public class UserController {
     @Autowired
-    private MsAuth msAuth;
+    AuthService authService;
+
     @Autowired
     private UserServiceImpl userService;
+
+    @Value("${app.version}")
+    private String appVersion;
+
+    @GetMapping("/health")
+    public ResponseEntity<?> index() {
+        String host = "Unknown host";
+        try {
+            host = InetAddress.getLocalHost().getHostName();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>("User service (" + appVersion + "). Host: " + host, HttpStatus.OK);
+    }
 
     @PostMapping("/add")
     public ResponseEntity<Response> addUser(@RequestBody User user) {
@@ -31,7 +50,7 @@ public class UserController {
             Auth auth = new Auth();
             auth.setEmail(user.getEmail());
             auth.setPassword(user.getPassword());
-            ResponseEntity<Response> ms_auth =  msAuth.addAuth(auth);
+            ResponseEntity<Response> ms_auth =  authService.addAuth(auth);
 
             if (ms_auth.getBody().getSuccess()) {
                 UserEntity userEntity = userService.addUser(entity);
@@ -123,7 +142,7 @@ public class UserController {
             return new Response(false, "Invalid token");
         }
         try {
-            ResponseEntity<Response> result = msAuth.validateToken(authHeader);
+            ResponseEntity<Response> result = authService.validateToken(authHeader);
 
             if (!result.getBody().getSuccess()) {
                 return new Response(false, "Invalid token");
