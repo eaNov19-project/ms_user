@@ -7,9 +7,13 @@ import ea.sof.shared.models.Response;
 import ea.sof.shared.models.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 
 @RestController
@@ -21,6 +25,20 @@ public class UserController {
 
     @Autowired
     private UserServiceImpl userService;
+
+    @Value("${APP_VERSION}")
+    private String appVersion;
+
+    @GetMapping("/health")
+    public ResponseEntity<?> index() {
+        String host = "Unknown host";
+        try {
+            host = InetAddress.getLocalHost().getHostName();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>("User service (" + appVersion + "). Host: " + host, HttpStatus.OK);
+    }
 
     @PostMapping("/add")
     public ResponseEntity<Response> addUser(@RequestBody User user) {
