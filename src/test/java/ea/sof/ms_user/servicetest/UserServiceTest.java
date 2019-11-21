@@ -30,7 +30,7 @@ public class UserServiceTest {
     @Test
     public void editUserTest() throws Exception {
         UserEntity mockUserEntity = new UserEntity("van@gmail.com", "+1641234567");
-        mockUserEntity.setUserId(1);
+        mockUserEntity.setUserId(1L);
         Mockito.when(userRepository.findByEmail(mockUserEntity.getEmail())).thenReturn(mockUserEntity);
         Mockito.when(userRepository.save(mockUserEntity)).thenReturn(mockUserEntity);
 
