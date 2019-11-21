@@ -8,4 +8,5 @@ public interface UserService {
     public UserEntity editUser(UserEntity userEntity) throws UserNotFoundException;
     public UserEntity getUser(String email) throws UserNotFoundException;
     public void saveNoOfQuestions(String email, Integer counter) throws UserNotFoundException;
+    public void deleteUser(String email) throws UserNotFoundException;
 }

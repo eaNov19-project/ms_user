@@ -55,18 +55,30 @@ public class UserController {
             Auth auth = new Auth();
             auth.setEmail(user.getEmail());
             auth.setPassword(user.getPassword());
-            ResponseEntity<Response> ms_auth =  authService.addAuth(auth);
-            //confirm authentication service persisted the user data before persisting
-            if (ms_auth.getBody().getSuccess()) {
-                UserEntity userEntity = userService.addUser(entity);
-                Response response = new Response();
-                response.setSuccess(true);
-                response.addObject("user", userEntity);
-                return new ResponseEntity(response, HttpStatus.OK);
+
+            //first add the user
+            UserEntity userEntity = userService.addUser(entity);
+            if(userEntity != null) {
+                //save user in authentication
+                auth.setUserId(userEntity.getUserId());
+                ResponseEntity<Response> ms_auth =  authService.addAuth(auth);
+                if(ms_auth.getBody().getSuccess()) {
+                    Response response = new Response();
+                    response.setSuccess(true);
+                    response.addObject("user", userEntity);
+                    return new ResponseEntity(response, HttpStatus.OK);
+                } else {
+                    userService.deleteUser(userEntity.getEmail());
+                    Response response = new Response();
+                    response.setSuccess(false);
+                    response.setMessage("Authentication Service network has some temporary issues");
+                    LOGGER.warn("Add users :: Exception. " + "Authentication network has some temporary issues");
+                    return new ResponseEntity(response, HttpStatus.BAD_GATEWAY);
+                }
             } else {
                 Response response = new Response();
                 response.setSuccess(false);
-                response.setMessage("Authentication network has some temporary issues");
+                response.setMessage("User Service network has some temporary issues");
                 LOGGER.warn("Add users :: Exception. " + "Authentication network has some temporary issues");
                 return new ResponseEntity(response, HttpStatus.BAD_GATEWAY);
             }

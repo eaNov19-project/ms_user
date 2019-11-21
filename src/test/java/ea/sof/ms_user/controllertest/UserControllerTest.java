@@ -35,7 +35,7 @@ public class UserControllerTest {
         UserEntity mockUserEntity = new UserEntity("van@gmail.com",  "+1641234567");
         User user= new User("van@gmail.com", null, "+1641234567");
 
-        Auth auth =  new Auth("van@gmail.com", "chinedu");
+        Auth auth =  new Auth(1,"van@gmail.com", "chinedu");
         Response response =  new Response();
         response.setSuccess(true);
 
